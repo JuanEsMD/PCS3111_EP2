@@ -15,7 +15,7 @@ BancoDeRegistradores::~BancoDeRegistradores(){
 
 int BancoDeRegistradores::getValor(int registrador){
 	if(registrador < 0 || registrador > 31)
-		throw new logic_error("Registrador invalido.")
+		throw new logic_error("Registrador invalido.");
 	else
 		return this->array[registrador];
 }
