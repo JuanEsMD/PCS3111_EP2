@@ -1,6 +1,6 @@
 #include "Dado.h"
 
-class Instrucao: public Dado{
+class Instrucao: public Dado {
 public:
 	
 	static const int LW = 35;
@@ -30,7 +30,7 @@ public:
 	virtual int getOrigem2();
 	virtual int getDestino();
 	virtual int getImediato();
-	virtual int getFuncao();	
+	virtual int getFuncao();
 
 private:
 	Instrucao(int opcode, int origem1, int origem2, int destino, int imediato, int funcao);

@@ -9,19 +9,30 @@ BancoDeRegistradores::BancoDeRegistradores(){
 		i++;
 	}
 }
+
 BancoDeRegistradores::~BancoDeRegistradores(){
 }
+
 int BancoDeRegistradores::getValor(int registrador){
-	return this->array[registrador];
+	if(registrador < 0 || registrador > 31)
+		throw new logic_error("Registrador invalido.")
+	else
+		return this->array[registrador];
 }
+
 void BancoDeRegistradores::setValor(int registrador, int valor){
-	this->array[registrador] = valor;
+	if(registrador < 0 || registrador > 31)
+		throw new logic_error("Registrador invalido.");
+	else if(registrador == 0)
+			return;
+	else
+		this->array[registrador] = valor;
 }
 
 void BancoDeRegistradores::imprimir(){
 	int i = 0;
 	while(i < 32){
-		cout << array[i] << endl;
+		cout << i << ": " << array[i] << endl;
 		i++;
 	}
 }

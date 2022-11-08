@@ -1,6 +1,7 @@
 //#include "Dado.h"
 #include "Instrucao.h"
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
 int Instrucao::getOpcode(){
