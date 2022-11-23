@@ -1,3 +1,6 @@
+#ifndef MEMORIARAM_H
+#define MEMORIARAM_H
+
 #include "Memoria.h"
 #include <list>
 using namespace std;
@@ -13,3 +16,5 @@ private:
 	int quantidade;
 
 };
+
+#endif // MEMORIARAM_H

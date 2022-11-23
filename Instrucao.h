@@ -1,3 +1,6 @@
+#ifndef INSTRUCAO_H
+#define INSTRUCAO_H
+
 #include "Dado.h"
 
 class Instrucao: public Dado {
@@ -42,3 +45,5 @@ private:
 	int imediato;
 	int funcao;
 };
+
+#endif // INSTRUCAO_H

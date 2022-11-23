@@ -13,7 +13,6 @@ MemoriaRAM::MemoriaRAM(int tamanho){
 	}
 }
 
-
 MemoriaRAM::~MemoriaRAM(){
 	delete array;
 }
@@ -45,4 +44,7 @@ void MemoriaRAM::escrever(list<Dado*>* dados){
 		i++;
 	}
 }
+
+
+
 
