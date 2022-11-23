@@ -1,3 +1,6 @@
+#ifndef BANCODEREGISTRADORES_H
+#define BANCODEREGISTRADORES_H
+
 #define QUANTIDADE_REGISTRADORES 32
 
 class BancoDeRegistradores{
@@ -13,3 +16,5 @@ private:
 
 	int array[32];
 };
+
+#endif // BANCODEREGISTRADORES_H

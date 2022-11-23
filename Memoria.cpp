@@ -8,6 +8,7 @@ Memoria::Memoria(){
 Memoria::~Memoria(){
 }
 
+
 int Memoria::getTamanho(){
 	return this->tamanho;
 }

@@ -1,4 +1,9 @@
+#ifndef MEMORIA_H
+#define MEMORIA_H
+
 #include "Dado.h"
+#include <iostream>
+using namespace std;
 
 class Memoria{
 public:
@@ -14,3 +19,5 @@ protected:
 	long tamanho;
 
 };
+
+#endif // MEMORIA_H
