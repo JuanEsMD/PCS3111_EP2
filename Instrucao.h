@@ -1,4 +1,8 @@
+#ifndef INSTRUCAO_H
+#define INSTRUCAO_H
+
 #include "Dado.h"
+
 
 class Instrucao: public Dado {
 public:
@@ -9,10 +13,10 @@ public:
 	static const int BNE = 5;
 	static const int BEQ = 4;
 	static const int TIPO_R = 0;
-	static const int FUNCAO_ADD = 32;
-	static const int FUNCAO_SUB = 34;
-	static const int FUNCAO_MULT = 24;
-	static const int FUNCAO_DIV = 26;
+	static const int ADD = 32;
+	static const int SUB = 34;
+	static const int MULT = 24;
+	static const int DIV = 26;
 
 	static Instrucao* criarLW(int destino, int imediato);
 	static Instrucao* criarSW(int destino, int imediato);
@@ -42,3 +46,5 @@ private:
 	int imediato;
 	int funcao;
 };
+
+#endif // INSTRUCAO_H

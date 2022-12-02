@@ -1,3 +1,6 @@
+#ifndef DADO_H
+#define DADO_H
+
 class Dado{
 	public:
 		Dado(int valor);
@@ -8,3 +11,5 @@ class Dado{
 	protected:
 		int valor;
 };
+
+#endif // DADO_H
