@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <list>
 using namespace std;
 
 GerenciadorDeMemoria::GerenciadorDeMemoria(){}
@@ -14,6 +15,7 @@ GerenciadorDeMemoria::~GerenciadorDeMemoria(){}
 void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 	ifstream input;
 	int i = 0;
+	list<Dado*>* dados;
 	input.open(arquivo);
 
 	if(input.fail())
@@ -33,6 +35,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			int inteiro;
 			input >> inteiro;
 			Dado* odad = new Dado(inteiro);
+			dados->push_back(odad);
 		}
 		else if(c == "LW"){
 			int destino;
@@ -41,7 +44,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_LW;
-			nova_LW->criarLW(destino, imediato);
+			dados->push_back(nova_LW->criarLW(destino, imediato));
 		}
 		else if(c == "SW"){
 			int destino;
@@ -50,7 +53,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_SW;
-			nova_SW->criarSW(destino, imediato);
+			dados->push_back(nova_SW->criarSW(destino, imediato));
 		}
 
 		else if(c == "J"){
@@ -58,7 +61,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_J;
-			nova_J->criarJ(imediato);
+			dados->push_back(nova_J->criarJ(imediato));
 		}
 	
 		else if(c == "BNE"){
@@ -70,7 +73,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_BNE;
-			nova_BNE->criarBNE(origem1, origem2, imediato);
+			dados->push_back(nova_BNE->criarBNE(origem1, origem2, imediato));
 		}
 				
 		else if(c == "BEQ"){
@@ -82,7 +85,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_BEQ;
-			nova_BEQ->criarBEQ(origem1, origem2, imediato);
+			dados->push_back(nova_BEQ->criarBEQ(origem1, origem2, imediato));
 		}
 				
 		else if(c == "ADD"){		
@@ -94,7 +97,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_ADD;
-			nova_ADD->criarADD(destino, origem1, origem2);
+			dados->push_back(nova_ADD->criarADD(destino, origem1, origem2));
 		}
 				
 		else if(c == "SUB"){
@@ -106,7 +109,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_SUB;
-			nova_SUB->criarSUB(destino, origem1, origem2);
+			dados->push_back(nova_SUB->criarSUB(destino, origem1, origem2));
 		}
 				
 		else if(c == "MULT"){
@@ -117,7 +120,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_MULT;
-			nova_MULT->criarMULT(origem1, origem2);
+			dados->push_back(nova_MULT->criarMULT(origem1, origem2));
 		}
 				
 		else if(c == "DIV"){
@@ -128,7 +131,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_DIV;
-			nova_DIV->criarDIV(origem1, origem2);
+			dados->push_back(nova_DIV->criarDIV(origem1, origem2));
 		}
 		else
 			throw new runtime_error("Intrucao nao reconhecida");
@@ -137,6 +140,9 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 	}
 	if(!input.eof())
 		throw new runtime_error("Erro de leitura");
+
+	if(!dados->empty())
+		randomAcessMemory->escrever(dados);
 	
 	input.close();
 }
