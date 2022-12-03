@@ -16,9 +16,11 @@ using namespace std;
 #include "TecladoDeChar.h"
 #include "Teclado.h"
 #include "UnidadeDeControle.h"
+#include "Interface.h"
 
 int main(){
-
+	
+	int fim = 0;
 	BancoDeRegistradores* registradores = new BancoDeRegistradores()
 	MemoriaRAM* MemRAM = new MemoriaRAM(64);
 	ESMapeadaNaMemoria* ESMap = new ESMapeadaNaMemoria(MRAM);
@@ -35,8 +37,15 @@ int main(){
 
 //  uso de ESMapeadaNaMemoria como Memoria: possivel fonte de erro
 	UnidadeDeControle* UC = new UnidadeDeControle(registradores, ESMap);
+	UC->setPC(0);
 
-	
+
+	while(true){
+		//uso de endereco de variavel: possivel fonte de erro
+		TelaInicial::ler(UC, fim);
+		if(fim == 1)
+			return 0;
+	}
 
 
 

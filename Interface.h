@@ -20,6 +20,6 @@ using namespace std;
 class TelaInicial{
 
 public:
-	void Ler(UnidadeDeControle* UC);
+	void ler(UnidadeDeControle* UC, int& fim);
 };
 
