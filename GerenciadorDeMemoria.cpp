@@ -1,80 +1,215 @@
-
 #include "MemoriaRAM.h"
 #include "Instrucao.h"
+#include "GerenciadorDeMemoria.h"
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <list>
 using namespace std;
-
-
 
 GerenciadorDeMemoria::GerenciadorDeMemoria(){}
 
-virtual GerenciadorDeMemoria::~GerenciadorDeMemoria(){}
+GerenciadorDeMemoria::~GerenciadorDeMemoria(){}
 
-virtual void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
-	
-}
-
-virtual void GerenciadorDeMemoria::dump(string arquivo, MemoriaRAM* m){
-	ofstream output;
+void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
+	ifstream input;
 	int i = 0;
-	output.open(arquivo);
-	output << m->tamanho << \n;
-	while(i < m->tamanho){
-		if(dynamic_cast<Instrucao*>(m->array[i]) == NULL)
-			output << 'D' << m->array[i]->valor;
+	list<Dado*>* dados;
+	input.open(arquivo);
+
+	if(input.fail())
+		throw new runtime_error("Arquivo nao encontrado");
+
+
+	int tamanhoDaRandomAcessMemory;
+	input >> tamanhoDaRandomAcessMemory;
+	MemoriaRAM *randomAcessMemory = new MemoriaRAM(tamanhoDaRandomAcessMemory);
+	while(input){
+		if(i > m->getTamanho())
+			throw new runtime_error("Arquivo nao cabe na memoria");
+
+		string c;
+		input >> c;
+		if(c == "D") {
+			int inteiro;
+			input >> inteiro;
+			Dado* odad = new Dado(inteiro);
+			dados->push_back(odad);
+			continue;
+		}
+		else if(c == "LW"){
+			int destino;
+			int imediato;
+			input >> destino;
+			input >> imediato;
+
+			Instrucao *nova_LW;
+			dados->push_back(nova_LW->criarLW(destino, imediato));
+			continue;
+		}
+		else if(c == "SW"){
+			int destino;
+			int imediato;
+			input >> destino;
+			input >> imediato;
+
+			Instrucao *nova_SW;
+			dados->push_back(nova_SW->criarSW(destino, imediato));
+			continue;
+		}
+
+		else if(c == "J"){
+			int imediato;
+			input >> imediato;
+
+			Instrucao *nova_J;
+			dados->push_back(nova_J->criarJ(imediato));
+			continue;
+		}
+	
+		else if(c == "BNE"){
+			int origem1;
+			int origem2;
+			int imediato;
+			input >> origem1;
+			input >> origem2;
+			input >> imediato;
+
+			Instrucao *nova_BNE;
+			dados->push_back(nova_BNE->criarBNE(origem1, origem2, imediato));
+			continue;
+		}
+				
+		else if(c == "BEQ"){
+			int origem1;
+			int origem2;
+			int imediato;
+			input >> origem1;
+			input >> origem2;
+			input >> imediato;
+
+			Instrucao *nova_BEQ;
+			dados->push_back(nova_BEQ->criarBEQ(origem1, origem2, imediato));
+			continue;
+		}
+				
+		else if(c == "ADD"){		
+			int destino;
+			int origem1;
+			int origem2;
+			input >> destino;
+			input >> origem1;
+			input >> origem2;
+	
+			Instrucao *nova_ADD;
+			dados->push_back(nova_ADD->criarADD(destino, origem1, origem2));
+			continue;
+		}
+				
+		else if(c == "SUB"){
+			int destino;
+			int origem1;
+			int origem2;
+			input >> destino;
+			input >> origem1;
+			input >> origem2;
+	
+			Instrucao *nova_SUB;
+			dados->push_back(nova_SUB->criarSUB(destino, origem1, origem2));
+			continue;
+		}
+				
+		else if(c == "MULT"){
+			int origem1;
+			int origem2;
+
+			input >> origem1;
+			input >> origem2;
+	
+			Instrucao *nova_MULT;
+			dados->push_back(nova_MULT->criarMULT(origem1, origem2));
+			continue;
+		}
+				
+		else if(c == "DIV"){
+			int origem1;
+			int origem2;
+
+			input >> origem1;
+			input >> origem2;
+	
+			Instrucao *nova_DIV;
+			dados->push_back(nova_DIV->criarDIV(origem1, origem2));
+			continue;
+			
+		}
 		else
-			output << imprimirInstrucao(dynamic_cast<Instrucao*>(m->array[i])) << \n;
+			throw new runtime_error("Intrucao nao reconhecida");
 		i++;
+	
 	}
-		
+	if(!input.eof())
+		throw new runtime_error("Erro de leitura");
+
+	if(!dados->empty())
+		randomAcessMemory->escrever(dados);
+	
+	input.close();
 }
 
+void GerenciadorDeMemoria::dump(string arquivo, MemoriaRAM* m){
+	ofstream output;
+	output.open(arquivo);
 
+	 if (!output)
+	 	ofstream outfile (arquivo);
 
+	if(output.fail())
+		throw new runtime_error("Erro de Leitura");
 
-
-
-
+	output << m->getTamanho() << "\n";
+	for(int i = 0; i < m->getTamanho(); i++){
+		if(dynamic_cast<Instrucao*>(m->ler(i)) == NULL)
+			output << 'D' << m->ler(i)->getValor();
+		else
+			output << imprimirInstrucao(dynamic_cast<Instrucao*>(m->ler(i))) << "\n";
+		if(output.fail())
+			throw new runtime_error("Erro de Leitura");
+	}
+	output.close();
+}
 
 string GerenciadorDeMemoria::imprimirInstrucao(Instrucao* I){
 
-	if(I->getOpcode() == I->R){
+	if(I->getOpcode() == I->TIPO_R){
 		if(I->getFuncao() == I->ADD)
-			return ( "ADD" + ((string) I->getDestino()) + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) );
+			return ( "ADD" + (I->getDestino()) + (I->getOrigem1()) + (I->getOrigem2()) );
 		else if(I->getFuncao() == I->SUB)
-			return ( "SUB" + ((string) I->getDestino()) + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) );
+			return ( "SUB" + (I->getDestino()) + (I->getOrigem1()) + (I->getOrigem2()) );
 	}
 
-	
-
 	if(I->getOpcode() == I->J)
-		return ( "J" + ((string) I->getImediato()) );
+		return ( "J" + (I->getImediato()) );
 	
-
-
 	if(I->getOpcode() == I->SW)
-		return ( "SW" + ((string) I->getDestino()) + ((string) I->getImediato()) );
+		return ( "SW" + (I->getDestino()) + (I->getImediato()) );
 	
 	if(I->getOpcode() == I->LW)
-		return ( "LW" + ((string) I->getDestino()) + ((string) I->getImediato()) );
+		return ( "LW" + (I->getDestino()) + (I->getImediato()) );
+
+	if(I->getOpcode() == I->BNE)
+			return ( "BNE" + (I->getOrigem1()) + (I->getOrigem2()) + (I->getImediato()) );
+
+	if(I->getOpcode() == I->BEQ)
+			return ( "BEQ" + (I->getOrigem1()) + (I->getOrigem2()) + (I->getImediato()) );
+
+
+	if(I->getOpcode() == I->MULT)
+		return ( "MULT" + (I->getOrigem1()) + (I->getOrigem2()) );
+
+	if(I->getOpcode() == I->DIV)
+		return ( "DIV" + (I->getOrigem1()) + (I->getOrigem2()) );
+
+	throw new runtime_error("Instrucao nao reconhecida");
 }
 
-
-
-	if(I->getOpcode() == I-> I->BNE)
-			return ( "BNE" + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) + ((string)I->getImediato()) );
-
-	if(I->getOpcode() == I-> I->BNQ)
-			return ( "BNQ" + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) + ((string)I->getImediato()) );
-
-	
-
-
-	if(I->getOpcode() == I-> I->MULT)
-		return ( "MULT" + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) );
-
-	if(I->getOpcode() == I-> I->DIV)
-		return ( "DIV" + ((string) I->getOrigem1()) + ((string) I->getOrigem2()) );
-}
