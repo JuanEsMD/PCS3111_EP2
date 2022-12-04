@@ -31,27 +31,27 @@ void UnidadeDeControle::setPC(int PC){
 //------------ Instruções -----------
 
 //ADD: Soma o conteúdo do registrador de origem 1 com o conteúdo do registrador de origem 2, colocando o resultado no registrador de destino. 
-void UnidadeDeControle::ADD(int destino, int origem1, int origem2){
+void UnidadeDeControle::FUNCAO_ADD(int destino, int origem1, int origem2){
 	this->registradores->setValor(destino, (this->registradores->getValor(origem1)) + (this->registradores->getValor(origem2)) );
 	this->PC++;
 }
 
 //SUB:  É feito o conteúdo do registrador de origem 1 menos o conteúdo do registrador de origem 2, colocando o resultado no registrador de destino. 
-void UnidadeDeControle::SUB(int destino, int origem1, int origem2){
+void UnidadeDeControle::FUNCAO_SUB(int destino, int origem1, int origem2){
 	this->registradores->setValor(destino, (this->registradores->getValor(origem1)) - (this->registradores->getValor(origem2)) );
 	this->PC++;
 }
 
 //MULT: O conteúdo do registrador de origem 1 é multiplicado pelo conteúdo do registrador de origem 2. O resultado da multiplicação é 
 //colocado noregistrador 24.
-void UnidadeDeControle::MULT(int origem1, int origem2){
+void UnidadeDeControle::FUNCAO_MULT(int origem1, int origem2){
 	this->registradores->setValor(24, (this->registradores->getValor(origem1)) * (this->registradores->getValor(origem2)));
 	this->PC++;
 }
 
 //DIV:O conteúdo do registrador de origem 1 é dividido pelo conteúdo do registrador de origem 2. O resultado da divisão é colocado
 // no registrador 24 ,enquanto que o resto da divisão é colocado no registrador 25. 
-void UnidadeDeControle::DIV(int origem1, int origem2){
+void UnidadeDeControle::FUNCAO_DIV(int origem1, int origem2){
 	this->registradores->setValor(24, (this->registradores->getValor(origem1)) / (this->registradores->getValor(origem2)));
 	this->registradores->setValor(25, (this->registradores->getValor(origem1)) % (this->registradores->getValor(origem2)));
 	this->PC++;
@@ -78,7 +78,6 @@ void UnidadeDeControle::FUNCAO_BEQ(int origem1, int origem2, int imediato){
 	else this->PC++;
 }
 
-//Consertar e terminar essa função!!!!!!(Acho que consertei -Juan)
 //Carrega no registrador destino o valor apontado pelo endereço da memória de dados em imediato. Se a memória tiver nulo,
 // deve-se carregar o valor 0 no registrador. 
 void UnidadeDeControle::FUNCAO_LW(int destino, int imediato){
@@ -100,33 +99,33 @@ void UnidadeDeControle::FUNCAO_SW(int destino, int imediato){
 
 //Verifica qual instrução será executada
 void UnidadeDeControle::executarInstrucao(){
+	//this->memoria->imprimir();
 	//Se a instrucao estiver vazia
     Instrucao *instrucoes = dynamic_cast<Instrucao*>(this->memoria->ler(PC));
-	if(instrucoes == NULL)
+	instrucoes->imprimir();
+	if(instrucoes == NULL){
 		this->PC++;
+	}
 
+	
 	else if(instrucoes->getOpcode() == 0){
 			switch(instrucoes->getFuncao()){
 		//ADD
 				case 32:
-					ADD(instrucoes->getDestino(), instrucoes->getOrigem1(), instrucoes->getOrigem2());
+					FUNCAO_ADD(instrucoes->getDestino(), instrucoes->getOrigem1(), instrucoes->getOrigem2());
 					break;
 		//SUB
 				case 34:
-					SUB(instrucoes->getDestino(), instrucoes->getOrigem1(), instrucoes->getOrigem2());
+					FUNCAO_SUB(instrucoes->getDestino(), instrucoes->getOrigem1(), instrucoes->getOrigem2());
 					break;
 		//MULT
 				case 24:
-					MULT(instrucoes->getOrigem1(), instrucoes->getOrigem2());
+					FUNCAO_MULT(instrucoes->getOrigem1(), instrucoes->getOrigem2());
 					break;
 		//DIV
 				case 26:
-					DIV(instrucoes->getOrigem1(), instrucoes->getOrigem2());
+					FUNCAO_DIV(instrucoes->getOrigem1(), instrucoes->getOrigem2());
 					break;
-
-		//NULL
-				case 0:
-					PC++;
 			}
 		}
 
@@ -153,10 +152,6 @@ void UnidadeDeControle::executarInstrucao(){
 			case 43:
 				FUNCAO_SW(instrucoes->getDestino(), instrucoes->getImediato());
 				break;
-
-	//NULL
-			case 0:
-				PC++;
 		}
 	}
 }

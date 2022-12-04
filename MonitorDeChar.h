@@ -4,6 +4,7 @@
 #include "Monitor.h"
 
 class MonitorDeChar : public Monitor{
+public:
     MonitorDeChar();
     virtual ~MonitorDeChar(); 
 

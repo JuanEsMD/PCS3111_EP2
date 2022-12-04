@@ -10,11 +10,16 @@ MemoriaRAM::MemoriaRAM(int tamanho){
 
 	while (i < tamanho){
 		this->array[i] = NULL;
+		i++;
 	}
 }
 
 MemoriaRAM::~MemoriaRAM(){
 	delete array;
+}
+
+int MemoriaRAM::getTamanho(){
+	return this->tamanho;
 }
 
 void MemoriaRAM::escrever(list<Dado*>* dados){
@@ -44,6 +49,37 @@ void MemoriaRAM::escrever(list<Dado*>* dados){
 		i++;
 	}
 }
+
+void MemoriaRAM::escrever(int posicao, Dado* d){
+	if(posicao < 0 || posicao > this->tamanho)
+		throw new logic_error("Posicao Invalida");
+	else
+		this->array[posicao] = d;
+	
+}
+
+Dado* MemoriaRAM::ler(int posicao){
+
+	if(posicao < 0 || posicao > this->tamanho){
+		throw new logic_error("Posicao Invalida");
+	}
+	else
+		return this->array[posicao];
+}
+
+
+void MemoriaRAM::imprimir(){
+	int i = 0;
+	while (i < this->tamanho){
+		Dado* a = this->array[i];
+		if(a == NULL)
+			cout << i << ": -" << endl;
+		else
+			cout << i << ": " << a->getValor() << endl;
+		i++;
+	}
+}
+
 
 
 

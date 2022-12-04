@@ -11,30 +11,28 @@ GerenciadorDeMemoria::GerenciadorDeMemoria(){}
 
 GerenciadorDeMemoria::~GerenciadorDeMemoria(){}
 
-void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
+void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* &m){
 	ifstream input;
-	int i = 0;
-	list<Dado*>* dados;
 	input.open(arquivo);
 
 	if(input.fail())
 		throw new runtime_error("Arquivo nao encontrado");
 
-
 	int tamanhoDaRandomAcessMemory;
 	input >> tamanhoDaRandomAcessMemory;
 	MemoriaRAM *randomAcessMemory = new MemoriaRAM(tamanhoDaRandomAcessMemory);
-	while(input){
-		if(i > m->getTamanho())
+	for(int posicao = 0; input; posicao++){
+		if(posicao > randomAcessMemory->getTamanho() + 1)
 			throw new runtime_error("Arquivo nao cabe na memoria");
-
 		string c;
 		input >> c;
+		//if(posicao != 0)
+			//randomAcessMemory->imprimir();
 		if(c == "D") {
 			int inteiro;
 			input >> inteiro;
 			Dado* odad = new Dado(inteiro);
-			dados->push_back(odad);
+			randomAcessMemory->escrever(posicao, odad);
 			continue;
 		}
 		else if(c == "LW"){
@@ -44,7 +42,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_LW;
-			dados->push_back(nova_LW->criarLW(destino, imediato));
+			randomAcessMemory->escrever(posicao, nova_LW->criarLW(destino, imediato));
 			continue;
 		}
 		else if(c == "SW"){
@@ -54,7 +52,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_SW;
-			dados->push_back(nova_SW->criarSW(destino, imediato));
+			randomAcessMemory->escrever(posicao, nova_SW->criarSW(destino, imediato));
 			continue;
 		}
 
@@ -63,7 +61,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_J;
-			dados->push_back(nova_J->criarJ(imediato));
+			randomAcessMemory->escrever(posicao, nova_J->criarJ(imediato));
 			continue;
 		}
 	
@@ -76,7 +74,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_BNE;
-			dados->push_back(nova_BNE->criarBNE(origem1, origem2, imediato));
+			randomAcessMemory->escrever(posicao, nova_BNE->criarBNE(origem1, origem2, imediato));
 			continue;
 		}
 				
@@ -89,7 +87,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> imediato;
 
 			Instrucao *nova_BEQ;
-			dados->push_back(nova_BEQ->criarBEQ(origem1, origem2, imediato));
+			randomAcessMemory->escrever(posicao, nova_BEQ->criarBEQ(origem1, origem2, imediato));
 			continue;
 		}
 				
@@ -102,7 +100,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_ADD;
-			dados->push_back(nova_ADD->criarADD(destino, origem1, origem2));
+			randomAcessMemory->escrever(posicao, nova_ADD->criarADD(destino, origem1, origem2));
 			continue;
 		}
 				
@@ -115,7 +113,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_SUB;
-			dados->push_back(nova_SUB->criarSUB(destino, origem1, origem2));
+			randomAcessMemory->escrever(posicao, nova_SUB->criarSUB(destino, origem1, origem2));
 			continue;
 		}
 				
@@ -127,7 +125,7 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_MULT;
-			dados->push_back(nova_MULT->criarMULT(origem1, origem2));
+			randomAcessMemory->escrever(posicao, nova_MULT->criarMULT(origem1, origem2));
 			continue;
 		}
 				
@@ -139,21 +137,25 @@ void GerenciadorDeMemoria::load(string arquivo, MemoriaRAM* m){
 			input >> origem2;
 	
 			Instrucao *nova_DIV;
-			dados->push_back(nova_DIV->criarDIV(origem1, origem2));
+			randomAcessMemory->escrever(posicao, nova_DIV->criarDIV(origem1, origem2));
 			continue;
 			
 		}
-		else
+		else if (c == "-"){
+			randomAcessMemory->escrever(posicao, NULL);
+			continue;
+		}
+		else if(c.empty())
+			break;
+		else{
 			throw new runtime_error("Intrucao nao reconhecida");
-		i++;
-	
+		}
 	}
-	if(!input.eof())
+	if(!input.eof()){
 		throw new runtime_error("Erro de leitura");
-
-	if(!dados->empty())
-		randomAcessMemory->escrever(dados);
-	
+	}
+	m = randomAcessMemory;
+	//m->imprimir();
 	input.close();
 }
 
@@ -169,8 +171,11 @@ void GerenciadorDeMemoria::dump(string arquivo, MemoriaRAM* m){
 
 	output << m->getTamanho() << "\n";
 	for(int i = 0; i < m->getTamanho(); i++){
-		if(dynamic_cast<Instrucao*>(m->ler(i)) == NULL)
-			output << 'D' << m->ler(i)->getValor();
+		if(m->ler(i) == NULL)
+			output << "-" << endl;
+		else if(dynamic_cast<Instrucao*>(m->ler(i)) == NULL){
+			output << "D " << m->ler(i)->getValor() << endl;
+		}
 		else
 			output << imprimirInstrucao(dynamic_cast<Instrucao*>(m->ler(i))) << "\n";
 		if(output.fail())

@@ -12,6 +12,10 @@ ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* disp
         this->tamanho = m->getTamanho() + dispositivos->size();
     }
 
+int ESMapeadaNaMemoria::getTamanho(){
+    return this->tamanho;
+}
+
 ESMapeadaNaMemoria::~ESMapeadaNaMemoria(){
     delete memoriaRam;
     delete dispositivos;
@@ -35,9 +39,9 @@ Dado* ESMapeadaNaMemoria::ler(int posicao){
         throw new logic_error("posicao invalida");
 
     if(posicao > this->memoriaRam->getTamanho())
-        (*dispositivos)[posicao]->ler();
-    else
-        this->memoriaRam->ler(posicao);
+        return (*dispositivos)[posicao]->ler();
+   
+    return this->memoriaRam->ler(posicao);
 }
 
 void ESMapeadaNaMemoria::escrever(int posicao, Dado* d){
@@ -47,7 +51,7 @@ void ESMapeadaNaMemoria::escrever(int posicao, Dado* d){
     if(posicao > this->memoriaRam->getTamanho())
         (*dispositivos)[posicao]->escrever(d);
     else
-        this->memoriaRam->Memoria::escrever(posicao, d); 
+        this->memoriaRam->escrever(posicao, d); 
 
 }
 

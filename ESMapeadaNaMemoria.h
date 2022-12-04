@@ -13,6 +13,7 @@ public:
     ESMapeadaNaMemoria(MemoriaRAM* m);
     ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* dispositivos);
     virtual ~ESMapeadaNaMemoria();
+    virtual int getTamanho();
     virtual MemoriaRAM* getMemoriaSubjacente();
     virtual void adicionar(Dispositivo* d);
     virtual vector<Dispositivo*>* getDispositivos(); 
@@ -22,7 +23,7 @@ public:
     virtual void imprimir();
 private:
     MemoriaRAM* memoriaRam;
-    vector<Dispositivo*>* dispositivos;
+    vector<Dispositivo*>* dispositivos = new vector<Dispositivo*>; 
 };
 
 #endif // ESMAPEADANAMEMORIA_H

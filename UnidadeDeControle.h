@@ -15,10 +15,10 @@ private:
     
     int PC;
 
-    void ADD(int destino, int origem1, int origem2);
-    void SUB(int destino, int origem1, int origem2);
-    void MULT(int origem1, int origem2);
-    void DIV(int origem1, int origem2);
+    void FUNCAO_ADD(int destino, int origem1, int origem2);
+    void FUNCAO_SUB(int destino, int origem1, int origem2);
+    void FUNCAO_MULT(int origem1, int origem2);
+    void FUNCAO_DIV(int origem1, int origem2);
     void FUNCAO_J(int imediato);
     void FUNCAO_BNE(int origem1, int origem2, int imediato);
     void FUNCAO_BEQ(int origem1, int origem2, int imediato);

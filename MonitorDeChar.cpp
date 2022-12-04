@@ -1,10 +1,10 @@
 #include "MonitorDeChar.h"
 
-Monitor::Monitor(){}
+MonitorDeChar::MonitorDeChar(){}
 
-Monitor::~Monitor(){}
+MonitorDeChar::~MonitorDeChar(){}
 
-void Monitor::escrever(Dado* d){
+void MonitorDeChar::escrever(Dado* d){
     char saida = static_cast<char>(d->getValor());
     cout << saida << endl;
 }
