@@ -3,17 +3,24 @@
 /**   Juan Estevão Mordente D'Angelo           13681190       **/
 /**   Mateus Pinheiro Negocia                  13681248       **/
 /**   Exercício-Programa E2                                   **/
-/**   Arquivo: Memoria.cpp                                    **/
+/**   Arquivo: GerenciadorDeMemoria.h                         **/
 /**                                                           **/
 /***************************************************************/
 
-#include "Memoria.h"
-#include <iostream>
-using namespace std;
+#ifndef GERENCIADORDEMEMORIA_H
+#define GERENCIADORDEMEMORIA_H
 
-Memoria::Memoria(){
-}
+#include "MemoriaRAM.h"
 
-Memoria::~Memoria(){
-}
+class GerenciadorDeMemoria{
+public:
+	GerenciadorDeMemoria();
+	virtual ~GerenciadorDeMemoria();
+	virtual void load(string arquivo, MemoriaRAM* &m);
+	virtual void dump(string arquivo, MemoriaRAM* m);
+private:
+	string imprimirInstrucao(Instrucao* I);
 
+};
+
+#endif //GERENCIADORDEMEMORIA_H

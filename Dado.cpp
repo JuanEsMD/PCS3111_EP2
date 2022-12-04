@@ -1,3 +1,12 @@
+/***************************************************************/
+/**                                                           **/
+/**   Juan Estevão Mordente D'Angelo           13681190       **/
+/**   Mateus Pinheiro Negocia                 13681248        **/
+/**   Exercício-Programa E2                                   **/
+/**   Arquivo: Dado.cpp                                       **/
+/**                                                           **/
+/***************************************************************/
+
 #include "Dado.h"
 #include <iostream>
 using namespace std;
@@ -15,5 +24,5 @@ int Dado::getValor(){
 }
 
 void Dado::imprimir(){
-	cout << this->valor;
+	cout << this->valor << endl;
 }

@@ -1,3 +1,12 @@
+/***************************************************************/
+/**                                                           **/
+/**   Juan Estevão Mordente D'Angelo           13681190       **/
+/**   Mateus Pinheiro Negocia                  13681248       **/
+/**   Exercício-Programa E2                                   **/
+/**   Arquivo: BancoDeRegistradores.cpp                       **/
+/**                                                           **/
+/***************************************************************/
+
 #include "BancoDeRegistradores.h"
 #include <iostream>
 using namespace std;
@@ -16,8 +25,9 @@ BancoDeRegistradores::~BancoDeRegistradores(){
 int BancoDeRegistradores::getValor(int registrador){
 	if(registrador < 0 || registrador > 31)
 		throw new logic_error("Registrador invalido.");
-	else
+	else{
 		return this->array[registrador];
+	}
 }
 
 void BancoDeRegistradores::setValor(int registrador, int valor){
@@ -30,9 +40,7 @@ void BancoDeRegistradores::setValor(int registrador, int valor){
 }
 
 void BancoDeRegistradores::imprimir(){
-	int i = 0;
-	while(i < 32){
+	for(int i = 0; i < 32; i++)
 		cout << i << ": " << array[i] << endl;
-		i++;
-	}
+
 }

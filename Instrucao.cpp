@@ -1,4 +1,12 @@
-//#include "Dado.h"
+/***************************************************************/
+/**                                                           **/
+/**   Juan Estevão Mordente D'Angelo           13681190       **/
+/**   Mateus Pinheiro Negocia                  13681248       **/
+/**   Exercício-Programa E2                                   **/
+/**   Arquivo: Instrucao.cpp                                  **/
+/**                                                           **/
+/***************************************************************/
+
 #include "Instrucao.h"
 #include <iostream>
 #include <stdexcept>
@@ -64,18 +72,22 @@ Instrucao* Instrucao::criarBEQ(int origem1, int origem2, int imediato){
 }
 
 Instrucao* Instrucao::criarADD(int destino, int origem1, int origem2){
-		return new Instrucao(TIPO_R, origem1, origem2, destino, 0, FUNCAO_ADD);
+		return new Instrucao(TIPO_R, origem1, origem2, destino, 0, ADD);
 }
 
 Instrucao* Instrucao::criarSUB(int destino, int origem1, int origem2){
-		return new Instrucao(TIPO_R, origem1, origem2, destino, 0, FUNCAO_SUB);
+		return new Instrucao(TIPO_R, origem1, origem2, destino, 0, SUB);
 }
 
 Instrucao* Instrucao::criarMULT(int origem1, int origem2){
-		return new Instrucao(TIPO_R, origem1, origem2, 0, 0, FUNCAO_MULT);
+		return new Instrucao(TIPO_R, origem1, origem2, 0, 0, MULT);
 }
 
 Instrucao* Instrucao::criarDIV(int origem1, int origem2){
-		return new Instrucao(TIPO_R, origem1, origem2, 0, 0, FUNCAO_DIV);
+		return new Instrucao(TIPO_R, origem1, origem2, 0, 0, DIV);
+}
+
+void Instrucao::imprimir(){
+	cout << "Instrucao: " << this->getOpcode();
 }
 
